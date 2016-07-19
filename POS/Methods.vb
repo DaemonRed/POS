@@ -57,9 +57,10 @@ Module Methods
                 Return True
             End If
         Catch ex As MySqlException
-            'MsgBox(ex.Message)
             MsgBox("Error connecting to server")
+            Return False
         End Try
+
         Return False
     End Function
 
@@ -112,9 +113,6 @@ Module Methods
         Return CheckDuplicateByName
     End Function
 
-    Public Sub saysomething()
-        MsgBox("something said")
-    End Sub
 End Module
 
 
