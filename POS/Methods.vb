@@ -28,6 +28,145 @@ Module Methods
         Next
         Return True
     End Function
+
+    Public Function updateNameByID(ByVal ID As Integer, ByVal newName As String) As Boolean
+        query = "UPDATE items SET name = @newName WHERE itemid = @itemId"
+        Try
+            OpenDB(con)
+            With cmd
+                .Connection = con
+                .CommandText = query
+                .Parameters.Clear()
+                .Parameters.AddWithValue("@newName", newName)
+                .Parameters.AddWithValue("@itemId", ID)
+            End With
+            cmd.ExecuteNonQuery()
+            Return True
+        Catch ex As Exception
+            MsgBox("Error updating item name" + vbNewLine + ex.Message())
+            Return False
+        End Try
+    End Function
+
+    Public Function updatePriceByID(ByVal ID As Integer, ByVal newPrice As Decimal) As Boolean
+        query = "UPDATE items SET selling_price = @newPrice WHERE itemid = @itemId"
+        Try
+            OpenDB(con)
+
+            With cmd
+                .Connection = con
+                .CommandText = query
+                .Parameters.Clear()
+                .Parameters.AddWithValue("@newPrice", newPrice)
+                .Parameters.AddWithValue("@itemId", ID)
+            End With
+
+            cmd.ExecuteNonQuery()
+            Return True
+
+        Catch ex As Exception
+            MsgBox(ex.Message)
+            Return False
+        End Try
+
+        CloseDB(con)
+
+    End Function
+
+    Public Function updateQuantityByID(ByVal ID As Integer, ByVal newQuantity As Integer) As Boolean
+        query = "UPDATE items SET quantity = @newQuantity WHERE itemid = @itemId"
+        Try
+            OpenDB(con)
+
+            With cmd
+                .Connection = con
+                .CommandText = query
+                .Parameters.Clear()
+                .Parameters.AddWithValue("@newPrice", newQuantity)
+                .Parameters.AddWithValue("@itemId", ID)
+            End With
+
+            cmd.ExecuteNonQuery()
+            Return True
+
+        Catch ex As Exception
+            MsgBox("Error updating item quantity " + vbNewLine + ex.Message)
+            Return False
+        End Try
+
+        CloseDB(con)
+    End Function
+
+    Public Function getPriceByID(ByVal ID As Integer) As Decimal
+        Dim price As Decimal
+        query = "SELECT price FROM items WHERE itemid = @itemId"
+
+        Try
+            OpenDB(con)
+            With cmd
+                .CommandText = query
+                .Parameters.Clear()
+                .Parameters.AddWithValue("@itemId", ID)
+            End With
+
+            price = cmd.ExecuteScalar()
+
+            CloseDB(con)
+        Catch ex As Exception
+            CloseDB(con)
+        Finally
+        End Try
+
+        Return price
+    End Function
+
+    Public Function getNameByID(ByVal ID As Integer) As String
+        Dim name As String = Nothing
+        query = "SELECT name FROM items WHERE itemid = @itemId"
+
+        Try
+            OpenDB(con)
+            With cmd
+                .CommandText = query
+                .Parameters.Clear()
+                .Parameters.AddWithValue("@itemId", ID)
+            End With
+
+            name = cmd.ExecuteScalar()
+
+            CloseDB(con)
+        Catch ex As Exception
+            CloseDB(con)
+        Finally
+        End Try
+
+        Return name
+    End Function
+
+    Public Function getQuantityByID(ByVal ID As Integer) As Integer
+        Dim Qty As Integer = Nothing
+
+        query = "SELECT quantity FROM items WHERE itemid = @itemId"
+
+        Try
+            OpenDB(con)
+            With cmd
+                .CommandText = query
+                .Parameters.Clear()
+                .Parameters.AddWithValue("@itemId", ID)
+            End With
+
+            Qty = cmd.ExecuteScalar()
+
+            CloseDB(con)
+        Catch ex As Exception
+            CloseDB(con)
+        Finally
+        End Try
+
+        Return Qty
+    End Function
+
     Function getRecords(commandText As MySqlCommand) As DataTable
         Dim D As New MySqlDataAdapter
         D.SelectCommand = commandText
